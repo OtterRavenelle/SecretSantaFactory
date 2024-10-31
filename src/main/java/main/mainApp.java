@@ -7,8 +7,6 @@ import model.Human;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class mainApp {
@@ -17,9 +15,9 @@ public class mainApp {
         Map<Human, Human> offPrint = new HashMap<>();
         File humanfile = new File("src/main/resources/HumanList.json");
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Human> humanList = objectMapper.readValue(humanfile, new TypeReference<List<Human>>() {
+        List<Human> humanList = objectMapper.readValue(humanfile, new TypeReference<>() {
         });
-        List<Human> santaList = objectMapper.readValue(humanfile, new TypeReference<List<Human>>() {
+        List<Human> santaList = objectMapper.readValue(humanfile, new TypeReference<>() {
         });
         System.out.println("Number of humans " + humanList.size());
 
@@ -33,19 +31,15 @@ public class mainApp {
                     Stream<Human> humanStream = humanList.stream();
                     Collections.shuffle(humanList);
                     Optional<Human> selected = humanStream
-                            .filter(human -> {
-                                return !human.getFirstName().equals(santa.getFirstName()) &&// NOT SELF
-                                        human.getLabel().equals(santa.getLabel()) &&
-                                        !human.getLastName().equals(santa.getLastName());
-                            })
+                            .filter(human -> !human.getFirstName().equals(santa.getFirstName()) &&// NOT SELF
+                                    human.getLabel().equals(santa.getLabel()) &&
+                                    !human.getLastName().equals(santa.getLastName()))
                             .findAny();
 
                     selected.ifPresent(human -> {
                         offPrint.put(santa, human);
                         humanList.remove(human);
                     });
-                    ;
-
                 });
 
 
