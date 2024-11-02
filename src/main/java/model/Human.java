@@ -7,10 +7,8 @@ import lombok.*;
 @JsonFormat
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Human {
     @JsonProperty
     String firstName;
@@ -19,7 +17,6 @@ public class Human {
     @JsonProperty
     String label;
     @JsonProperty
-     String previousChosen;
-
+    String previousChosen;
 
 }

@@ -7,12 +7,10 @@ import model.Human;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class mainApp {
 
     public static void main(String[] args) throws IOException {
-        Map<Human, Human> offPrint = new HashMap<>();
         File humanfile = new File("src/main/resources/HumanList.json");
         ObjectMapper objectMapper = new ObjectMapper();
         List<Human> humanList = objectMapper.readValue(humanfile, new TypeReference<>() {
@@ -25,12 +23,11 @@ public class mainApp {
             System.out.println("HumanList.json size is odd, we need one more human to run the Secret Santa Factory ");
             return;
         }
-
+        Map<Human, Human> offPrint = new HashMap<>();
         santaList
                 .forEach(santa -> {
-                    Stream<Human> humanStream = humanList.stream();
                     Collections.shuffle(humanList);
-                    Optional<Human> selected = humanStream
+                    Optional<Human> selected = humanList.stream()
                             .filter(human -> !human.getFirstName().equals(santa.getFirstName()) &&// NOT SELF
                                     human.getLabel().equals(santa.getLabel()) &&
                                     !human.getLastName().equals(santa.getLastName()))
@@ -42,13 +39,7 @@ public class mainApp {
                     });
                 });
 
-
-        for (Map.Entry<Human, Human> humanHumanEntry : offPrint.entrySet()) {
-            Human key = humanHumanEntry.getKey();
-            Human value = humanHumanEntry.getValue();
-            System.out.println("Santa : " + key.getFirstName() + " -> " + value.getFirstName());
-
-        }
+        offPrint.forEach((key, value) -> System.out.println("Santa " + key.getFirstName() + " -> " + value.getFirstName()));
 
 
     }
